@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-blast-radius"
+version = "0.1.0"
+description = "Reconstruct what an agent session touched — and what's irreversible — from its transcript."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Salman Ahsan (RBL)" }]
+keywords = ["ai-agents", "claude-code", "forensics", "incident-response", "security", "devtools"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: System :: Monitoring",
+]
+
+[project.urls]
+Homepage = "https://github.com/0xelitesystem/agent-blast-radius"
+Issues = "https://github.com/0xelitesystem/agent-blast-radius/issues"
+
+[project.scripts]
+blast-radius = "agent_blast_radius.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
