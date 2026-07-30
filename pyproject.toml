@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "agent-blast-radius"
 version = "0.1.0"
-description = "Reconstruct what an agent session touched — and what's irreversible — from its transcript."
+description = "Reconstruct what an agent session touched, and what's irreversible, from its transcript."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

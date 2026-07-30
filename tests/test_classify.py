@@ -21,7 +21,7 @@ def test_benign_is_contained(benign_transcript):
 
 
 def test_destructive_is_wide(destructive_transcript):
-    # git push (irreversible HIGH) + rm -rf — no CRITICAL irreversible → WIDE.
+    # git push (irreversible HIGH) + rm -rf, no CRITICAL irreversible → WIDE.
     assert _report(destructive_transcript).tier is BlastTier.WIDE
 
 

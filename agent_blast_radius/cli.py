@@ -1,4 +1,4 @@
-"""blast-radius — reconstruct what an agent session touched, from the transcript.
+"""blast-radius: reconstruct what an agent session touched, from the transcript.
 
 Usage:
   blast-radius report <transcript.jsonl | session-id-prefix | latest> [options]
@@ -48,7 +48,7 @@ def _filtered(report: BlastReport, only: str | None,
               danger_min: str | None) -> BlastReport:
     """Return a shallow copy of the report with actions filtered by the
     --only / --danger-min flags. Tier is computed from the *full* action set
-    and left untouched — filters change the view, not the verdict."""
+    and left untouched: filters change the view, not the verdict."""
     actions = report.actions
     if only:
         category = _CATEGORY_BY_NAME[only]
@@ -90,7 +90,7 @@ def _cmd_report(args: argparse.Namespace) -> int:
         if not args.json:
             print(f"  markdown report written to {args.md}\n")
 
-    # The gate inspects the *unfiltered* report — a CRITICAL action you
+    # The gate inspects the *unfiltered* report. A CRITICAL action you
     # filtered out of the view is still a CRITICAL action that happened.
     if args.fail_on_critical and _has_critical_irreversible(report):
         return 1
@@ -113,8 +113,8 @@ def _cmd_list(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="blast-radius",
-        description="Reconstruct what an agent session touched — and what's "
-                    "irreversible — from its transcript.",
+        description="Reconstruct what an agent session touched, and what's "
+                    "irreversible, from its transcript.",
     )
     parser.add_argument("--version", action="version",
                         version=f"blast-radius {__version__}")
@@ -146,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
     # Windows consoles often default to cp1252, which can't encode the ✓/✗/●/⚠
     # glyphs or the ── box-drawing we print. Reconfigure to utf-8 with
     # errors=replace so a forensic report never dies on an encode error mid-run
-    # (a crash here would defeat the whole point — you run this *after* an
+    # (a crash here would defeat the whole point: you run this *after* an
     # incident, when you least want a second failure).
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):

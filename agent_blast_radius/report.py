@@ -1,7 +1,7 @@
 """Render a BlastReport: ANSI terminal report, Markdown, or JSON.
 
-The terminal report leads with the headline — the irreversible-and-succeeded
-actions — because in an incident those are the only things you can't fix by
+The terminal report leads with the headline, the irreversible-and-succeeded
+actions, because in an incident those are the only things you can't fix by
 re-running the agent. Everything below is grouped by category for context.
 """
 
@@ -95,7 +95,7 @@ def render_terminal(report: BlastReport, color: bool | None = None) -> str:
     title = session.slug or Path(session.path).stem[:12]
     out("")
     out(_paint("  agent-blast-radius", _BOLD, _CYAN, enabled=color)
-        + _paint(" — what did this agent touch, and what's irreversible?",
+        + _paint(": what did this agent touch, and what's irreversible?",
                  _DIM, enabled=color))
     out(_paint(f"  session {title} · {len(session.events)} events"
                + (f" · {session.cwd}" if session.cwd else ""),
@@ -124,7 +124,7 @@ def render_terminal(report: BlastReport, color: bool | None = None) -> str:
             out(_paint(f"    └─ {action.detail}  [event {action.event_index}]",
                        _DIM, enabled=color))
     else:
-        out(_paint("  none — nothing the agent did is unrecoverable.",
+        out(_paint("  none: nothing the agent did is unrecoverable.",
                    _DIM, enabled=color))
     out("")
 
@@ -215,7 +215,7 @@ def render_markdown(report: BlastReport) -> str:
                 f"| {a.severity.value.upper()} | `{_md(a.target)}` "
                 f"| {_md(a.detail)} | {a.event_index} |")
     else:
-        lines.append("_None — nothing the agent did is unrecoverable._")
+        lines.append("_None: nothing the agent did is unrecoverable._")
     lines.append("")
 
     grouped = report.by_category()

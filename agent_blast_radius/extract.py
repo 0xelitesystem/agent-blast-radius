@@ -2,7 +2,7 @@
 
 This module is the forensic reconstruction step: walk the tool calls in
 transcript order and emit one Action per observable side effect. We work
-purely from the transcript — no live process tracing — so everything here
+purely from the transcript, with no live process tracing, so everything here
 is pattern-matching on tool names and shell command text. classify.py then
 stamps each Action with reversibility + severity; we only set the raw facts
 (category, target, success, file_op, path_escape, edit_count) here.
@@ -65,7 +65,7 @@ _PKG_RE = re.compile(
 _PKG_INSTALL_WORDS = ("install", "add", "get")
 _GLOBAL_FLAGS = ("-g", "--global", "--system", "sudo")
 
-# Secrets surface — reading credential material.
+# Secrets surface: reading credential material.
 _SECRET_NAME_RE = re.compile(
     r"(\.env|\.envrc|credentials|secret|\.pem|\.key|id_rsa|id_ed25519|"
     r"\.aws/|\.ssh/|\.netrc|token|\.pgpass|kube.*config|\.npmrc)",
@@ -87,7 +87,7 @@ _MIGRATE_RE = re.compile(
     r"\b(migrate|migration|alembic\s+upgrade|flyway|prisma\s+migrate|"
     r"rails\s+db:migrate|knex\s+migrate)\b", re.IGNORECASE)
 
-# Version control — the highest-stakes category.
+# Version control: the highest-stakes category.
 _GIT_RE = re.compile(r"^git$", re.IGNORECASE)
 _GH_RE = re.compile(r"^gh$", re.IGNORECASE)
 _GH_WRITE_SUBS = ("pr", "issue", "repo", "release", "api", "gist", "secret")
@@ -112,7 +112,7 @@ def _split_pipeline(command: str) -> list[str]:
 
 
 def _path_escapes(path: str, cwd: str) -> bool:
-    """True when `path` resolves outside the session cwd — a write/delete
+    """True when `path` resolves outside the session cwd: a write/delete
     that reaches beyond the project the agent was supposed to be working in.
     Done lexically (no disk touch): forensic input may be on another machine."""
     if not path or not cwd:
@@ -199,7 +199,7 @@ def _extract_file_tool(event, session, actions, seen_paths) -> None:
 
 
 def _edit_weight(event: Event) -> int:
-    """How many discrete edits a single tool call represents — a MultiEdit
+    """How many discrete edits a single tool call represents. A MultiEdit
     bundles several, so it should bump the per-file edit count by that many."""
     if event.tool_name == "MultiEdit":
         edits = event.tool_input.get("edits")
@@ -255,7 +255,7 @@ def _extract_shell(event, session, actions, seen_paths) -> None:
         if not toks:
             continue
         # A leading `sudo` (with its own flags like `-E`) is a privilege
-        # prefix, not the real verb — peel it off so `sudo pip install`
+        # prefix, not the real verb, so peel it off and `sudo pip install`
         # classifies as a pkg install. The privilege itself is still captured:
         # the segment text starts with "sudo", which the global-flag check sees.
         if toks and toks[0].lower() == "sudo":
@@ -325,7 +325,7 @@ def _git_action(segment: str, toks: list[str], event: Event, ok: bool) -> Action
              or "+" in rest)
     if sub == "push":
         if force:
-            detail = "force-push (rewrites remote history — unrecoverable for others)"
+            detail = "force-push (rewrites remote history, unrecoverable for others)"
             rev, sev = Reversibility.IRREVERSIBLE, Severity.CRITICAL
         else:
             detail = "push to remote (public once pushed)"
@@ -374,7 +374,7 @@ def _gh_action(segment: str, toks: list[str], event: Event, ok: bool) -> Action 
         or any(v in rest for v in _GH_WRITE_VERBS)
     )
     if not is_write:
-        return None  # gh pr view / gh repo list etc. are read-only — skip
+        return None  # gh pr view / gh repo list etc. are read-only, so skip
     return Action(
         category=Category.NETWORK,
         target=segment,
@@ -383,7 +383,7 @@ def _gh_action(segment: str, toks: list[str], event: Event, ok: bool) -> Action 
         reversibility=Reversibility.IRREVERSIBLE,
         severity=Severity.HIGH,
         succeeded=ok,
-        detail="GitHub write via gh (PR/issue/repo mutation — visible to others)",
+        detail="GitHub write via gh (PR/issue/repo mutation, visible to others)",
     )
 
 
@@ -403,7 +403,7 @@ def _delete_action(segment, toks, event, session, ok, seen_paths) -> Action:
         detail = "file deletion"
     if escape:
         sev = Severity.HIGH
-        detail += " — path outside cwd"
+        detail += ", path outside cwd"
     return Action(
         category=Category.SYSTEM,
         target=target_path,
@@ -485,7 +485,7 @@ def _db_action(segment, event, ok) -> Action:
     destructive = bool(_DB_DESTRUCTIVE_RE.search(segment))
     migration = bool(_MIGRATE_RE.search(segment))
     if destructive:
-        detail = "destructive SQL (DROP/DELETE/TRUNCATE/UPDATE — data loss)"
+        detail = "destructive SQL (DROP/DELETE/TRUNCATE/UPDATE: data loss)"
         rev, sev = Reversibility.IRREVERSIBLE, Severity.CRITICAL
     elif migration:
         detail = "database migration (schema change applied)"

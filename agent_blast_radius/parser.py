@@ -14,7 +14,7 @@ one mental model. Format notes (observed against Claude Code 2.x transcripts):
   are not needed and are skipped.
 
 Matching tool_use to tool_result by id is what tells us whether a
-destructive command actually ran — the whole report hinges on it.
+destructive command actually ran. The whole report hinges on it.
 """
 
 from __future__ import annotations

@@ -88,7 +88,7 @@ def benign_transcript(tmp_path):
 
 @pytest.fixture
 def destructive_transcript(tmp_path):
-    """git push + rm -rf build/ — an irreversible push and a recursive delete,
+    """git push + rm -rf build/, an irreversible push and a recursive delete,
     both succeeding → WIDE."""
     records = [
         assistant_tool("t1", "Edit", {
@@ -108,7 +108,7 @@ def destructive_transcript(tmp_path):
 
 @pytest.fixture
 def failed_delete_transcript(tmp_path):
-    """`rm important.py` that FAILS — must not count as a deletion / damage."""
+    """`rm important.py` that FAILS: must not count as a deletion / damage."""
     records = [
         bash("t1", "rm important.py"),
         tool_result("t1", "rm: cannot remove 'important.py': No such file or directory",
@@ -147,7 +147,7 @@ def path_escape_transcript(tmp_path):
 
 @pytest.fixture
 def secret_read_transcript(tmp_path):
-    """Reads a .env then cats credentials — both exposures."""
+    """Reads a .env then cats credentials, both exposures."""
     records = [
         assistant_tool("t1", "Read", {"file_path": "C:\\fake\\project\\.env"}),
         tool_result("t1", "API_KEY=sk-123"),

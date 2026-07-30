@@ -4,7 +4,7 @@ extract.py already sets a first-pass severity and reversibility per action
 from its command shape. This module applies the two cross-cutting policies
 that need the whole picture:
 
-1. Success-gating downgrade. A *failed* destructive command did nothing —
+1. Success-gating downgrade. A *failed* destructive command did nothing.
    `rm important.py` that exited non-zero deleted no file. We must not let a
    failed action drive the tier, so we neutralize its blast (severity floored,
    reversibility relaxed) while keeping the record visible with a "(failed)"
@@ -47,7 +47,7 @@ def _refine(action: Action) -> None:
     # escaped the cwd is a real blast-radius concern regardless of op.
     if action.path_escape and action.severity is Severity.INFO:
         action.severity = Severity.MEDIUM
-        action.detail = (action.detail + " — wrote outside cwd").strip(" —")
+        action.detail = (action.detail + ", wrote outside cwd").strip(" ,")
     # Heavily-edited files are worth surfacing but stay reversible/LOW.
     if action.file_op is FileOp.MODIFIED and action.edit_count >= 5 \
             and action.severity is Severity.INFO:
@@ -62,15 +62,15 @@ def _downgrade_failed(action: Action) -> None:
     if severity_rank(action.severity) > severity_rank(Severity.LOW):
         action.severity = Severity.LOW
     if action.detail and "(failed" not in action.detail:
-        action.detail = f"{action.detail} (failed — no effect)"
+        action.detail = f"{action.detail} (failed, no effect)"
     elif not action.detail:
-        action.detail = "failed — no effect"
+        action.detail = "failed, no effect"
 
 
 def compute_tier(actions: list[Action]) -> BlastTier:
     """Roll the classified actions up to one session-level tier.
 
-    Only SUCCESSFUL actions count toward damage — a failed destructive call
+    Only SUCCESSFUL actions count toward damage. A failed destructive call
     took no effect (see _downgrade_failed). We look at the worst combination
     of reversibility and severity among the survivors.
     """

@@ -57,7 +57,7 @@ class Event:
         """Did this tool call actually run its side effect?
 
         A command that errored (is_error, or a non-zero exit code parsed
-        from output) never had its effect — a failed `rm` deleted nothing.
+        from output) never had its effect. A failed `rm` deleted nothing.
         When we have no result at all we assume success: the absence of an
         error record is weak evidence the call went through.
         """
@@ -101,7 +101,7 @@ class Category(enum.Enum):
 
 
 class Reversibility(enum.Enum):
-    """How hard it is to undo an action — the core forensic axis.
+    """How hard it is to undo an action: the core forensic axis.
 
     Ordered worst-last so max() finds the most permanent action.
     """
@@ -147,7 +147,7 @@ def reversibility_rank(rev: Reversibility) -> int:
 
 
 class FileOp(enum.Enum):
-    """What happened to a file — created / modified / deleted / moved."""
+    """What happened to a file: created / modified / deleted / moved."""
 
     CREATED = "created"
     MODIFIED = "modified"
@@ -177,15 +177,15 @@ class Action:
     path_escape: bool = False  # target resolved outside session.cwd
 
     def is_headline(self) -> bool:
-        """Irreversible AND it actually happened — the can't-take-it-back set."""
+        """Irreversible AND it actually happened: the can't-take-it-back set."""
         return self.succeeded and self.reversibility is Reversibility.IRREVERSIBLE
 
 
 class BlastTier(enum.Enum):
     """Session-level summary of the worst successful damage done."""
 
-    CONTAINED = "contained"  # edits, local commits — all recoverable
-    MODERATE = "moderate"  # deletes / installs / resets — recoverable with effort
+    CONTAINED = "contained"  # edits, local commits: all recoverable
+    MODERATE = "moderate"  # deletes / installs / resets: recoverable with effort
     WIDE = "wide"  # an irreversible action landed (push, egress)
     CRITICAL = "critical"  # an irreversible action AND it was CRITICAL severity
 
@@ -205,7 +205,7 @@ class BlastReport:
         return grouped
 
     def headlines(self) -> list[Action]:
-        """Irreversible, successful actions — sorted most dangerous first."""
+        """Irreversible, successful actions, sorted most dangerous first."""
         heads = [a for a in self.actions if a.is_headline()]
         heads.sort(key=lambda a: severity_rank(a.severity), reverse=True)
         return heads

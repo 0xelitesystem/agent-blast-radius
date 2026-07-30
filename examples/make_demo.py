@@ -1,7 +1,7 @@
-"""Generate examples/demo-session.jsonl — a realistic WIDE/CRITICAL session.
+"""Generate examples/demo-session.jsonl, a realistic WIDE/CRITICAL session.
 
 The demo agent: edits 3 files, pip-installs a package, makes a local commit,
-force-pushes to origin (irreversible + critical — rewrites shared history),
+force-pushes to origin (irreversible + critical, rewrites shared history),
 recursively deletes a directory, and curls data out to a webhook (egress).
 Run it as:
 
