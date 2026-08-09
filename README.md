@@ -43,7 +43,7 @@ That's a real report of [`examples/demo-session.jsonl`](examples/demo-session.js
   ✓ CRIT git push --force origin main  IRREVERSIBLE
 
   NETWORK / EXTERNAL  (1)
-  ✓ HIGH curl -X POST https://hooks.acme.dev/deploy --data '{"status":"deploye…  IRREVERSIBLE
+  ✓ HIGH curl -X POST https://hooks.acme.dev/deploy --data '{"status":"deploye...  IRREVERSIBLE
 
   PACKAGES / ENV  (1)
   ✓ LOW  pip install redis  hard-to-reverse
@@ -174,6 +174,10 @@ pip install -e .[dev]
 pytest
 python examples/make_demo.py && blast-radius report examples/demo-session.jsonl
 ```
+
+## More
+
+Part of a catalog of single-file browser tools and plain-language references, all MIT licensed and dependency-free: [0xelitesystem.github.io](https://0xelitesystem.github.io/). Built by [elitesystem.ai](https://elitesystem.ai).
 
 ## License
 
