@@ -64,7 +64,7 @@ def write_jsonl(path, records: list[dict]) -> str:
 
 @pytest.fixture
 def benign_transcript(tmp_path):
-    """Edits three files, runs pytest. Nothing destructive → CONTAINED."""
+    """Edits three files, runs pytest. Nothing destructive -> CONTAINED."""
     records = [
         assistant_text("I'll implement the feature."),
         assistant_tool("t1", "Write", {
@@ -89,7 +89,7 @@ def benign_transcript(tmp_path):
 @pytest.fixture
 def destructive_transcript(tmp_path):
     """git push + rm -rf build/, an irreversible push and a recursive delete,
-    both succeeding → WIDE."""
+    both succeeding -> WIDE."""
     records = [
         assistant_tool("t1", "Edit", {
             "file_path": "C:\\fake\\project\\src\\app.py",
@@ -120,7 +120,7 @@ def failed_delete_transcript(tmp_path):
 
 @pytest.fixture
 def critical_transcript(tmp_path):
-    """pip install (global) + curl POST data out + force-push → CRITICAL."""
+    """pip install (global) + curl POST data out + force-push -> CRITICAL."""
     records = [
         bash("t1", "sudo pip install requests --global"),
         tool_result("t1", "Successfully installed requests"),
@@ -135,7 +135,7 @@ def critical_transcript(tmp_path):
 
 @pytest.fixture
 def path_escape_transcript(tmp_path):
-    """Writes a file OUTSIDE the session cwd → path-escape flagged."""
+    """Writes a file OUTSIDE the session cwd -> path-escape flagged."""
     records = [
         assistant_tool("t1", "Write", {
             "file_path": "C:\\Users\\User\\.ssh\\authorized_keys",
@@ -159,7 +159,7 @@ def secret_read_transcript(tmp_path):
 
 @pytest.fixture
 def db_transcript(tmp_path):
-    """A destructive SQL DELETE via psql -c → IRREVERSIBLE + CRITICAL."""
+    """A destructive SQL DELETE via psql -c -> IRREVERSIBLE + CRITICAL."""
     records = [
         bash("t1", "psql -c 'DELETE FROM users WHERE 1=1'"),
         tool_result("t1", "DELETE 4210"),

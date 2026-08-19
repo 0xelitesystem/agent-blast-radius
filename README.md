@@ -22,10 +22,10 @@ That's a real report of [`examples/demo-session.jsonl`](examples/demo-session.js
 
 ```
   agent-blast-radius, what did this agent touch, and what's irreversible?
-  session demo-session · 10 events · /home/dev/acme-api
+  session demo-session  -  10 events  -  /home/dev/acme-api
 
   BLAST TIER  CRITICAL
-  3 files · 2 vcs · 1 network · 1 packages · 1 system
+  3 files  -  2 vcs  -  1 network  -  1 packages  -  1 system
 
   IRREVERSIBLE & SUCCEEDED  (2)
   ● CRIT git push --force origin main
@@ -126,7 +126,7 @@ Each action gets two independent axes, and the session rolls up to one tier.
 | HIGH | a `git push`, a recursive delete, data egress, a `gh` PR/issue write |
 | CRITICAL | a force-push, destructive SQL that landed |
 
-**Blast tier** is computed from the worst *successful* action: `CONTAINED` (only reversible edits) → `MODERATE` (something hard-to-reverse landed) → `WIDE` (an irreversible action landed) → `CRITICAL` (an irreversible action that was also CRITICAL severity).
+**Blast tier** is computed from the worst *successful* action: `CONTAINED` (only reversible edits) -> `MODERATE` (something hard-to-reverse landed) -> `WIDE` (an irreversible action landed) -> `CRITICAL` (an irreversible action that was also CRITICAL severity).
 
 ### Success-gating: a failed `rm` deleted nothing
 
