@@ -137,7 +137,7 @@ def test_path_inside_cwd_not_flagged(benign_transcript):
 
 
 def test_chained_command_splits(tmp_path):
-    """git add && git commit && git push -> three VCS actions from one Bash."""
+    """git add && git commit && git push → three VCS actions from one Bash."""
     from tests.conftest import bash, tool_result, write_jsonl
     records = [
         bash("a", "git add . && git commit -m x && git push origin main"),

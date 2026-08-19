@@ -21,12 +21,12 @@ def test_benign_is_contained(benign_transcript):
 
 
 def test_destructive_is_wide(destructive_transcript):
-    # git push (irreversible HIGH) + rm -rf, no CRITICAL irreversible -> WIDE.
+    # git push (irreversible HIGH) + rm -rf, no CRITICAL irreversible → WIDE.
     assert _report(destructive_transcript).tier is BlastTier.WIDE
 
 
 def test_critical_is_critical(critical_transcript):
-    # force-push is irreversible + CRITICAL -> CRITICAL tier.
+    # force-push is irreversible + CRITICAL → CRITICAL tier.
     assert _report(critical_transcript).tier is BlastTier.CRITICAL
 
 
@@ -36,7 +36,7 @@ def test_db_delete_is_critical(db_transcript):
 
 def test_failed_delete_does_not_count(failed_delete_transcript):
     report = _report(failed_delete_transcript)
-    # The rm failed -> tier must stay CONTAINED (nothing was deleted).
+    # The rm failed → tier must stay CONTAINED (nothing was deleted).
     assert report.tier is BlastTier.CONTAINED
     deletes = [a for a in report.actions if a.file_op is FileOp.DELETED]
     assert deletes  # the action is still recorded...
@@ -60,7 +60,7 @@ def test_failed_critical_does_not_escalate(tmp_path):
 
 
 def test_only_install_is_moderate(tmp_path):
-    """A successful local pip install (hard-to-reverse, not irreversible) -> MODERATE."""
+    """A successful local pip install (hard-to-reverse, not irreversible) → MODERATE."""
     from tests.conftest import bash, tool_result, write_jsonl
     records = [
         bash("a", "pip install requests"),

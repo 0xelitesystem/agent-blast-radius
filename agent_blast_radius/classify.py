@@ -96,7 +96,7 @@ def compute_tier(actions: list[Action]) -> BlastTier:
 
 
 def analyze(session: Session) -> BlastReport:
-    """Full pipeline tail: extract -> classify -> tier. Imported lazily to
+    """Full pipeline tail: extract → classify → tier. Imported lazily to
     avoid a circular import (extract imports models; classify imports extract
     would otherwise loop through report)."""
     from .extract import extract_actions

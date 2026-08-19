@@ -83,7 +83,7 @@ def _paint(text: str, *styles: str, enabled: bool = True) -> str:
 
 def _short(text: str, width: int = 88) -> str:
     text = " ".join(text.split())
-    return text if len(text) <= width else text[: width - 1] + "..."
+    return text if len(text) <= width else text[: width - 1] + "…"
 
 
 def render_terminal(report: BlastReport, color: bool | None = None) -> str:
@@ -97,8 +97,8 @@ def render_terminal(report: BlastReport, color: bool | None = None) -> str:
     out(_paint("  agent-blast-radius", _BOLD, _CYAN, enabled=color)
         + _paint(": what did this agent touch, and what's irreversible?",
                  _DIM, enabled=color))
-    out(_paint(f"  session {title}  -  {len(session.events)} events"
-               + (f"  -  {session.cwd}" if session.cwd else ""),
+    out(_paint(f"  session {title} · {len(session.events)} events"
+               + (f" · {session.cwd}" if session.cwd else ""),
                _DIM, enabled=color))
     out("")
 
@@ -106,7 +106,7 @@ def render_terminal(report: BlastReport, color: bool | None = None) -> str:
     out(f"  {_paint('BLAST TIER', _BOLD, enabled=color)}  "
         + _paint(tier_label, _BOLD, tier_style, enabled=color))
     counts = report.counts()
-    summary = "  -  ".join(f"{counts[c.value]} {c.value}" for c in Category
+    summary = " · ".join(f"{counts[c.value]} {c.value}" for c in Category
                          if counts[c.value])
     out(_paint("  " + (summary or "no side-effecting actions detected"),
                _DIM, enabled=color))
